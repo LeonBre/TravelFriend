@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import de.brettin.leon.travelfriend.R;
+import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 import de.brettin.leon.travelfriend.resources.TfUserNameRes;
 
 /**
@@ -52,12 +54,18 @@ public class TfAccountFragment extends Fragment{
  */
 class SetUpClass {
 
-    private String mCurrentUsername;
     private View mView;
+
+    private String mCurrentUsername;
+
+    private AppCompatCheckBox mPositionCheckbox;
+
 
 
     public SetUpClass(View view) {
         mView = view;
+
+        mPositionCheckbox = mView.findViewById(R.id.positionCheckBox);
     }
 
     /**
@@ -108,8 +116,17 @@ class SetUpClass {
         });
     }
 
+    /**
+     * Set up the functionality for the Position Checkbox
+     */
     void setUpPositionCheck() {
+        mPositionCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TfPositionCheckRes checkPositionResource = TfPositionCheckRes.getInstance(view.getContext());
+                checkPositionResource.setCheckPosition(mPositionCheckbox.isChecked());
 
-
+            }
+        });
     }
 }

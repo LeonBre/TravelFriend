@@ -34,7 +34,7 @@ public class TfSharedPreferences {
 
     }
 
-    public void persist(String key, String value) {
+    public void write(String key, String value) {
         mSharedPreferences.edit().putString(key, value).apply();
     }
 
@@ -48,5 +48,17 @@ public class TfSharedPreferences {
             throw new NothingFoundException();
         }
         return value;
+    }
+
+    public boolean readBoolean (String key, boolean def) {
+        return mSharedPreferences.getBoolean(key, def);
+    }
+
+    public void writeBoolean(String key, boolean value) {
+        mSharedPreferences.edit().putBoolean(key, value);
+    }
+
+    public boolean hasValue(String key) {
+        return mSharedPreferences.contains(key);
     }
 }

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import de.brettin.leon.travelfriend.resources.TfDatabase;
+import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 
 /**
  * IntentService to update the current location of the user in the firebase database.
@@ -36,6 +37,13 @@ public class TfUpdatePositionIntentService extends IntentService{
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Context context = this.getApplicationContext();
+
+        // If the user doesnt want to get checked we return here
+        TfPositionCheckRes checkRes = TfPositionCheckRes.getInstance(context);
+        if (!checkRes.shouldCheckPosition()) {
+            return;
+        }
+
         final TfDatabase database = TfDatabase.getInstance(context);
 
         // Permission check

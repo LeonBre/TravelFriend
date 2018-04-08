@@ -30,13 +30,13 @@ public class TfUserNameRes {
             username = mPreferences.read(USERNAMEKEY);
         } catch (NothingFoundException e) {
             username = RANDOMUSERNAME + UUID.randomUUID().toString().substring(0,4);
-            mPreferences.persist(USERNAMEKEY, username);
+            mPreferences.write(USERNAMEKEY, username);
         }
         return username;
 
     }
 
     public void setUsername(String username) {
-        mPreferences.persist(USERNAMEKEY, username);
+        mPreferences.write(USERNAMEKEY, username);
     }
 }
