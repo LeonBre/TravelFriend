@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "436984053217",
+    "firebase_url": "https://travelfriend-1521615638269.firebaseio.com",
+    "project_id": "travelfriend-1521615638269",
+    "storage_bucket": "travelfriend-1521615638269.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436984053217:android:c7b006f5e2c85e08",
+        "android_client_info": {
+          "package_name": "de.brettin.leon.travelfriend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436984053217-gjvc5fr3sdg9tn9hiv53q3ruj1nv2gao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrIof5inoD7HDx5EGGWclcfSQrHLSVtNo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
