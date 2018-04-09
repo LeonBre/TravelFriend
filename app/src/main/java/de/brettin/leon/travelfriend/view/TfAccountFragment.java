@@ -1,6 +1,8 @@
 package de.brettin.leon.travelfriend.view;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import de.brettin.leon.travelfriend.R;
+import de.brettin.leon.travelfriend.resources.TfDatabase;
 import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 import de.brettin.leon.travelfriend.resources.TfUserNameRes;
 
@@ -43,6 +48,7 @@ public class TfAccountFragment extends Fragment{
         SetUpClass setUpClass = new SetUpClass(view);
         setUpClass.setUpUsernameCard();
         setUpClass.setUpPositionCheck();
+        setUpClass.setUpUpdatePosition();
 
         return view;
     }
@@ -60,12 +66,18 @@ class SetUpClass {
 
     private AppCompatCheckBox mPositionCheckbox;
 
-
+    private FloatingActionButton mUpdatePositionButton;
+    private ProgressBar mUpdatePositionProgressBar;
+    private TextView mUpdatePositionText;
 
     public SetUpClass(View view) {
         mView = view;
 
         mPositionCheckbox = mView.findViewById(R.id.positionCheckBox);
+
+        mUpdatePositionButton = mView.findViewById(R.id.updatePositionButton);
+        mUpdatePositionProgressBar = mView.findViewById(R.id.updatePositionProgressBar);
+        mUpdatePositionText = mView.findViewById(R.id.updatePositionText);
     }
 
     /**
@@ -125,6 +137,35 @@ class SetUpClass {
                 TfPositionCheckRes checkPositionResource = TfPositionCheckRes.getInstance(view.getContext());
                 checkPositionResource.setCheckPosition(mPositionCheckbox.isChecked());
 
+            }
+        });
+    }
+
+    /**
+     * Set up the functionality for the Update Position Field
+     */
+    void setUpUpdatePosition() {
+
+        mUpdatePositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mUpdatePositionProgressBar.setVisibility(View.VISIBLE);
+                mUpdatePositionButton.setVisibility(View.GONE);
+
+                TfDatabase.getInstance(view.getContext()).writeOwnPosition();
+
+                new CountDownTimer(60000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        mUpdatePositionText.setText(mView.getResources().getString(R.string.update_position_timing, millisUntilFinished / 1000));
+                    }
+
+                    public void onFinish() {
+                        mUpdatePositionText.setText(R.string.update_position);
+                        mUpdatePositionProgressBar.setVisibility(View.GONE);
+                        mUpdatePositionButton.setVisibility(View.VISIBLE);
+                    }
+                }.start();
             }
         });
     }
