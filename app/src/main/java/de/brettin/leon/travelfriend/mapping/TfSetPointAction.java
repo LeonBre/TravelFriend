@@ -15,10 +15,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import de.brettin.leon.travelfriend.model.UserPosition;
+import de.brettin.leon.travelfriend.model.TfUserPosition;
 import de.brettin.leon.travelfriend.resources.TfDatabase;
+import de.brettin.leon.travelfriend.resources.TfFirebasePositionConverter;
 import de.brettin.leon.travelfriend.resources.TfUserNameRes;
 
 /**
@@ -29,6 +29,8 @@ public class TfSetPointAction {
     Context mContext;
     GoogleMap mGoogleMap;
     DatabaseReference mRef;
+
+    MarkerOptions mOwnPosition;
 
     public TfSetPointAction(Context context, GoogleMap googleMap) {
         mContext = context;
@@ -52,6 +54,9 @@ public class TfSetPointAction {
         TfUserNameRes userNameRes = new TfUserNameRes(mContext);
         options.title(userNameRes.getUsername());
         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        mOwnPosition = options;
+
         mGoogleMap.addMarker(options);
     }
 
@@ -66,9 +71,15 @@ public class TfSetPointAction {
                     return;
                 }
 
-                TfSetPointAction.this.setOtherPoints(
-                        database.convertDataSnapshot(dataSnapshot)
-                );
+                // Clear all markers on change
+                mGoogleMap.clear();
+                mGoogleMap.addMarker(mOwnPosition);
+
+                // Convert and filter list
+                TfFirebasePositionConverter converter = new TfFirebasePositionConverter();
+                List<TfUserPosition> convertedPositions = converter.convertAndFilter(dataSnapshot, mContext);
+
+                TfSetPointAction.this.setOtherPoints(convertedPositions);
             }
 
             @Override
@@ -79,13 +90,13 @@ public class TfSetPointAction {
         mRef.addValueEventListener(positionListener);
     }
 
-    private void setOtherPoints(List<UserPosition> positions) {
-        for (UserPosition userPosition: positions) {
+    private void setOtherPoints(List<TfUserPosition> positions) {
+        for (TfUserPosition userPosition: positions) {
             setOnePoint(userPosition);
         }
     }
 
-    private void setOnePoint (UserPosition userPosition) {
+    private void setOnePoint (TfUserPosition userPosition) {
         MarkerOptions options = new MarkerOptions();
         LatLng position = new LatLng(userPosition.getLat(), userPosition.getLng());
         options.position(position);

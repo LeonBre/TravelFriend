@@ -7,7 +7,7 @@ import java.util.Calendar;
 /**
  * Representation of the position in the firebase database
  */
-public class UserPosition {
+public class TfUserPosition {
 
     private String username;
     private Calendar timestamp;
@@ -15,7 +15,7 @@ public class UserPosition {
     private double lng;
 
 
-    public UserPosition(String username, double lat, double lng, Calendar timestamp) {
+    public TfUserPosition(String username, double lat, double lng, Calendar timestamp) {
         this.username = username;
         this.lng = lng;
         this.lat = lat;
