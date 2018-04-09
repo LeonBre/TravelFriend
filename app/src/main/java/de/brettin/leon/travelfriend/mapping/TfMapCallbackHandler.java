@@ -46,25 +46,8 @@ public class TfMapCallbackHandler implements OnMapReadyCallback {
         LatLng nelson = new LatLng(-41, 171);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(nelson));
 
-        if (TfPositionCheckRes.getInstance(mContext).shouldCheckPosition()) {
-            Awareness.getSnapshotClient(mContext).getLocation().addOnCompleteListener(new OnCompleteListener<LocationResponse>() {
-                @Override
-                public void onComplete(@NonNull Task<LocationResponse> task) {
-                    if (!task.isSuccessful()) {
-                        return;
-                    }
-                    Location ownLocation = task.getResult().getLocation();
-                    TfDatabase.getInstance(mContext).writeOwnPosition(new LatLng(ownLocation.getLatitude(), ownLocation.getLongitude()));
-                    TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
-                    pointAction.setPoints(ownLocation);
-                }
+        TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
+        pointAction.setPoints();
 
-            });
-        } else {
-
-            // Just set the other points and not the own one
-            TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
-            pointAction.setOtherPoints();
-        }
     }
 }

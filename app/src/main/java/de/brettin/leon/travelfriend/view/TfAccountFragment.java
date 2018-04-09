@@ -75,8 +75,7 @@ class SetUpClass {
         final FloatingActionButton changeUsernameButton = mView.findViewById(R.id.changeUsernameButton);
         final TextInputEditText usernameInputText = mView.findViewById(R.id.usernamehint);
 
-        final TfUserNameRes userNameRes = new TfUserNameRes(mView.getContext());
-        mCurrentUsername = userNameRes.getUsername();
+        mCurrentUsername = TfUserNameRes.getInstance(mView.getContext()).getUsername();
         usernameInputText.setText(mCurrentUsername);
 
         usernameInputText.addTextChangedListener(new TextWatcher() {
@@ -105,7 +104,7 @@ class SetUpClass {
             public void onClick(View view) {
                 String newUserName = usernameInputText.getText().toString();
                 if (!newUserName.equals(mCurrentUsername)) {
-                    userNameRes.setUsername(newUserName);
+                    TfUserNameRes.getInstance(view.getContext()).setUsername(newUserName);
                     mCurrentUsername = newUserName;
 
                     changeUsernameButton.setImageResource(R.drawable.ic_done_black_24dp);

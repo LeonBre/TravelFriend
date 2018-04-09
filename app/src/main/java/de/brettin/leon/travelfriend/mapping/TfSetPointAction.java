@@ -13,7 +13,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import de.brettin.leon.travelfriend.model.TfUserPosition;
@@ -30,15 +29,12 @@ public class TfSetPointAction {
     GoogleMap mGoogleMap;
     DatabaseReference mRef;
 
-    MarkerOptions mOwnPosition;
-
     public TfSetPointAction(Context context, GoogleMap googleMap) {
         mContext = context;
         mGoogleMap = googleMap;
     }
 
-    public void setPoints(Location ownLocation) {
-        this.setOwnPosition(ownLocation);
+    public void setPoints() {
         this.initiateListener();
     }
 
@@ -46,20 +42,10 @@ public class TfSetPointAction {
         this.initiateListener();
     }
 
-    private void setOwnPosition(Location ownLocation) {
-        MarkerOptions options = new MarkerOptions();
-        LatLng position = new LatLng(ownLocation.getLatitude(), ownLocation.getLongitude());
-        options.position(position);
-
-        TfUserNameRes userNameRes = new TfUserNameRes(mContext);
-        options.title(userNameRes.getUsername());
-        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-        mOwnPosition = options;
-
-        mGoogleMap.addMarker(options);
-    }
-
+    /**
+     * Initiates the listener for the firebase database.
+     * When data on the realtime database changes onDataChange is called.
+     */
     private void initiateListener() {
         final TfDatabase database = TfDatabase.getInstance(mContext);
         mRef = database.getPointReference();
@@ -73,7 +59,6 @@ public class TfSetPointAction {
 
                 // Clear all markers on change
                 mGoogleMap.clear();
-                mGoogleMap.addMarker(mOwnPosition);
 
                 // Convert and filter list
                 TfFirebasePositionConverter converter = new TfFirebasePositionConverter();
@@ -102,7 +87,28 @@ public class TfSetPointAction {
         options.position(position);
         options.title(userPosition.getUsername());
 
+        // Point is own point
+        if (TfUserNameRes.getInstance(mContext).getUsername().equals(userPosition.getUsername())) {
+            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        }
+
         mGoogleMap.addMarker(options);
     }
 
+
+    /**
+     * ---- UNUSED ----
+     * Sets own position on the map
+     * @param ownLocation Actual location of the client.
+     */
+    private void setOwnPosition(Location ownLocation) {
+        MarkerOptions options = new MarkerOptions();
+        LatLng position = new LatLng(ownLocation.getLatitude(), ownLocation.getLongitude());
+        options.position(position);
+
+        options.title(TfUserNameRes.getInstance(mContext).getUsername());
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        mGoogleMap.addMarker(options);
+    }
 }

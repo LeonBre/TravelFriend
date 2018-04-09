@@ -13,9 +13,8 @@ import java.util.List;
 import de.brettin.leon.travelfriend.model.TfUserPosition;
 
 /**
- * Created by Leon on 09.04.18.
+ * Converts the firebase snapshot data in the right format.
  */
-
 public class TfFirebasePositionConverter {
 
     public List<TfUserPosition> convertAndFilter(DataSnapshot dataSnapshot, Context context) {
@@ -43,21 +42,18 @@ public class TfFirebasePositionConverter {
     public List<TfUserPosition> filterPositions (List<TfUserPosition> userPositions, Context context) {
         List<TfUserPosition> result = new LinkedList<>();
 
-        TfUserNameRes userNameRes = new TfUserNameRes(context);
         Calendar twoDaysAgo= Calendar.getInstance();
         twoDaysAgo.add(Calendar.DATE, -2);
 
         for (TfUserPosition userPosition : userPositions) {
             // Check timestamp
             boolean timestampTooOld = userPosition.getTimestamp().before(twoDaysAgo);
-            // Check for own data
-            boolean ownUserName = userPosition.getUsername().equals(userNameRes.getUsername());
 
-            if (!(timestampTooOld || ownUserName)) {
+
+            if (!timestampTooOld) {
                 result.add(userPosition);
             }
         }
-
         return result;
     }
 }

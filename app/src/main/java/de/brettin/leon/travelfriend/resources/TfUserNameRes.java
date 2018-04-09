@@ -5,17 +5,26 @@ import android.content.Context;
 import java.util.UUID;
 
 /**
- * Created by Leon on 06.04.18.
+ * Username resource, who saves the username
  */
-
 public class TfUserNameRes {
+
+    // Singleton Pattern
+    private static TfUserNameRes mInstance;
+
+    public static TfUserNameRes getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new TfUserNameRes(context);
+        }
+        return mInstance;
+    }
 
     public static final String USERNAMEKEY = "usernamekey";
     public static final String RANDOMUSERNAME = "randomuser";
 
     TfSharedPreferences mPreferences;
 
-    public TfUserNameRes (Context context) {
+    private TfUserNameRes (Context context) {
         mPreferences = TfSharedPreferences.getInstance(context);
     }
 
