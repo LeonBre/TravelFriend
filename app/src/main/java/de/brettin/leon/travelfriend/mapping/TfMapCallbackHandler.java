@@ -53,14 +53,15 @@ public class TfMapCallbackHandler implements OnMapReadyCallback {
                 if (!task.isSuccessful()) {
                     return;
                 }
-
                 Location ownLocation = task.getResult().getLocation();
-                TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
 
+                // TODO CLEAN this up
+
+                TfDatabase.getInstance(mContext).writeOwnPosition(new LatLng(ownLocation.getLatitude(),ownLocation.getLongitude()));
+                TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
                 pointAction.setPoints(ownLocation);
 
-                TfDatabase database = TfDatabase.getInstance(mContext);
-                //database.write(position);
+
             }
 
         });

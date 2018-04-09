@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.brettin.leon.travelfriend.model.UserPosition;
@@ -51,7 +52,8 @@ public class TfSetPointAction {
     }
 
     private void initiateListener() {
-        mRef = TfDatabase.getInstance(mContext).getPointReference();
+        final TfDatabase database = TfDatabase.getInstance(mContext);
+        mRef = database.getPointReference();
 
         ValueEventListener positionListener = new ValueEventListener() {
             @Override
@@ -60,18 +62,9 @@ public class TfSetPointAction {
                     return;
                 }
 
-                Log.d(this.getClass().getSimpleName(), dataSnapshot.getValue().toString());
-                Map<String,String> data = (Map<String,String>) dataSnapshot.getValue();
-
-                LinkedList<UserPosition> positionList = new LinkedList<>();
-                for (String key : data.keySet()) {
-                    String[] positionArray = data.get(key).split(":");
-
-                    // CARE this can make huge trouble!!!
-                    positionList.add(new UserPosition(key, Double.parseDouble(positionArray[0]), Double.parseDouble(positionArray[1])));
-                }
-
-                TfSetPointAction.this.setOtherPoints(positionList);
+                TfSetPointAction.this.setOtherPoints(
+                        database.convertDataSnapshot(dataSnapshot)
+                );
             }
 
             @Override
@@ -82,7 +75,7 @@ public class TfSetPointAction {
         mRef.addValueEventListener(positionListener);
     }
 
-    private void setOtherPoints(LinkedList<UserPosition> positions) {
+    private void setOtherPoints(List<UserPosition> positions) {
         for (UserPosition userPosition: positions) {
             setOnePoint(userPosition);
         }
