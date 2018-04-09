@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TravelFriend</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">TravelFriend</string>
 
     <string name="update_position">Position jetzt aktualisieren</string>
     <string name="update_position_timing">Aktualisierung in %d Sekunden wieder möglich</string>
