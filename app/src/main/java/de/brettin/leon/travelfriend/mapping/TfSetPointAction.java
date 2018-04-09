@@ -40,6 +40,10 @@ public class TfSetPointAction {
         this.initiateListener();
     }
 
+    public void setOtherPoints() {
+        this.initiateListener();
+    }
+
     private void setOwnPosition(Location ownLocation) {
         MarkerOptions options = new MarkerOptions();
         LatLng position = new LatLng(ownLocation.getLatitude(), ownLocation.getLongitude());

@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,13 +61,16 @@ public class TfDatabase {
     public List<UserPosition> convertDataSnapshot(DataSnapshot dataSnapshot) {
         List<UserPosition> result = new ArrayList<>();
 
-        Map<String,PositionWithTimeStamp> data = (Map<String,PositionWithTimeStamp>) dataSnapshot.getValue();
+        Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
+        while (iter.hasNext()) {
+            DataSnapshot next = iter.next();
 
-        for (String key : data.keySet()) {
-            PositionWithTimeStamp pos = data.get(key);
+            String username = next.getKey();
+            PositionWithTimeStamp pos = next.getValue(PositionWithTimeStamp.class);
+
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(pos.timestamp);
-            result.add(new UserPosition(key, pos.lat, pos.lng, cal));
+            result.add(new UserPosition(username, pos.lat, pos.lng, cal));
 
         }
         return result;
@@ -75,13 +79,16 @@ public class TfDatabase {
 }
 
 class PositionWithTimeStamp {
-    double lat;
-    double lng;
-    long timestamp;
+    public double lat;
+    public double lng;
+    public long timestamp;
 
     public PositionWithTimeStamp(double lat, double lng, long timestamp) {
         this.lat = lat;
         this.lng = lng;
         this.timestamp = timestamp;
     }
+
+    //None argument constructor for firebase
+    public PositionWithTimeStamp(){}
 }

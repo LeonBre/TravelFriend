@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import de.brettin.leon.travelfriend.resources.TfDatabase;
+import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 
 /**
  * Handler to work with the map, when the map has finished loading
@@ -41,29 +42,29 @@ public class TfMapCallbackHandler implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Move the camera to nelson
+        LatLng nelson = new LatLng(-41, 171);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(nelson));
 
-
-        Awareness.getSnapshotClient(mContext).getLocation().addOnCompleteListener(new OnCompleteListener<LocationResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationResponse> task) {
-                if (!task.isSuccessful()) {
-                    return;
+        if (TfPositionCheckRes.getInstance(mContext).shouldCheckPosition()) {
+            Awareness.getSnapshotClient(mContext).getLocation().addOnCompleteListener(new OnCompleteListener<LocationResponse>() {
+                @Override
+                public void onComplete(@NonNull Task<LocationResponse> task) {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    Location ownLocation = task.getResult().getLocation();
+                    TfDatabase.getInstance(mContext).writeOwnPosition(new LatLng(ownLocation.getLatitude(), ownLocation.getLongitude()));
+                    TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
+                    pointAction.setPoints(ownLocation);
                 }
-                Location ownLocation = task.getResult().getLocation();
 
-                // TODO CLEAN this up
+            });
+        } else {
 
-                TfDatabase.getInstance(mContext).writeOwnPosition(new LatLng(ownLocation.getLatitude(),ownLocation.getLongitude()));
-                TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
-                pointAction.setPoints(ownLocation);
-
-
-            }
-
-        });
+            // Just set the other points and not the own one
+            TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
+            pointAction.setOtherPoints();
+        }
     }
 }

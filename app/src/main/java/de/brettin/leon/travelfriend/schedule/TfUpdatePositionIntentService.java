@@ -48,6 +48,7 @@ public class TfUpdatePositionIntentService extends IntentService{
 
         // Permission check
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            int i = 0;
             return;
         }
         // Update position

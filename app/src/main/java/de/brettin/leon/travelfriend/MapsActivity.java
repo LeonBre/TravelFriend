@@ -1,10 +1,7 @@
 package de.brettin.leon.travelfriend;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.service.carrier.CarrierMessagingService;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -12,24 +9,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.android.gms.awareness.Awareness;
-import com.google.android.gms.awareness.snapshot.LocationResponse;
-import com.google.android.gms.awareness.snapshot.LocationResult;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import de.brettin.leon.travelfriend.mapping.TfMapCallbackHandler;
-import de.brettin.leon.travelfriend.schedule.TfPositionUpdateScheduler;
 import de.brettin.leon.travelfriend.schedule.TfScheduleManager;
 import de.brettin.leon.travelfriend.view.TfMainViewPager;
 
@@ -43,6 +25,26 @@ public class MapsActivity extends FragmentActivity {
         // Schedule all Tasks
         TfScheduleManager.schedule(this);
 
+        // Check for Permission of the user
+        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String [] {Manifest.permission.ACCESS_COARSE_LOCATION}, 14141);
+        } else {
+            initiate();
+        }
+    }
+
+    /**
+     * Wait until permission is granted
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        initiate();
+    }
+
+    /**
+     * Initate view
+     */
+    private void initiate() {
         // Callbackhandler when the map has finished loading
         TfMapCallbackHandler callbackHandler = new TfMapCallbackHandler(this);
 
@@ -68,6 +70,5 @@ public class MapsActivity extends FragmentActivity {
                 return true;
             }
         });
-
     }
 }
