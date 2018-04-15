@@ -42,10 +42,6 @@ public class TfMapCallbackHandler implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        // Move the camera to nelson
-        LatLng nelson = new LatLng(-41, 171);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(nelson));
-
         TfSetPointAction pointAction = new TfSetPointAction(mContext, googleMap);
         pointAction.setPoints();
 

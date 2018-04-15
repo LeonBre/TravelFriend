@@ -43,7 +43,7 @@ public class TfFirebasePositionConverter {
         List<TfUserPosition> result = new LinkedList<>();
 
         Calendar twoDaysAgo= Calendar.getInstance();
-        twoDaysAgo.add(Calendar.DATE, -2);
+        twoDaysAgo.add(Calendar.DATE, -1);
 
         for (TfUserPosition userPosition : userPositions) {
             // Check timestamp

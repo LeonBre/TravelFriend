@@ -1,15 +1,9 @@
 package de.brettin.leon.travelfriend.mapping;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,11 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-import de.brettin.leon.travelfriend.R;
 import de.brettin.leon.travelfriend.model.TfUserPosition;
 import de.brettin.leon.travelfriend.resources.TfDatabase;
 import de.brettin.leon.travelfriend.resources.TfFirebasePositionConverter;
-import de.brettin.leon.travelfriend.resources.TfUserNameRes;
 
 /**
  * Class how manages the point setting on the googlemap
@@ -65,6 +57,8 @@ public class TfSetPointAction {
                 List<TfUserPosition> convertedPositions = converter.convertAndFilter(dataSnapshot, mContext);
 
                 TfSetPointAction.this.setOtherPoints(convertedPositions);
+
+                TfSetPointAction.this.setCameraPosition(convertedPositions);
             }
 
             @Override
@@ -85,5 +79,10 @@ public class TfSetPointAction {
        MarkerOptions options = TfMarkerFactory.getInstance().createMarker(userPosition, mContext);
         mGoogleMap.addMarker(options);
 
+    }
+
+    private void setCameraPosition(List<TfUserPosition> convertedPositions) {
+        TfMapCalculation zoomAction = new TfMapCalculation();
+        zoomAction.setCameraPosition(convertedPositions, mGoogleMap);
     }
 }
