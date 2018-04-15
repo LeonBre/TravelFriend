@@ -43,6 +43,13 @@ public class TfSetPointAction {
         mRef = database.getPointReference();
 
         ValueEventListener positionListener = new ValueEventListener() {
+
+            /**
+             * Here the interesting part begins.
+             * At this point all current data is loaded from the firebase database and it is possible to add them on the map.
+             * @param dataSnapshot Snapshot with all the firebase data.
+             */
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() == 0) {
@@ -50,14 +57,18 @@ public class TfSetPointAction {
                 }
 
                 // Clear all markers on change
+                // If you dont clear them you just add and add new markers.
                 mGoogleMap.clear();
 
-                // Convert and filter list
+                // Convert and filter list.
+                // There are still some points on the database that you dont want to see.
                 TfFirebasePositionConverter converter = new TfFirebasePositionConverter();
                 List<TfUserPosition> convertedPositions = converter.convertAndFilter(dataSnapshot, mContext);
 
-                TfSetPointAction.this.setOtherPoints(convertedPositions);
+                // Sets the convertet points on the map
+                TfSetPointAction.this.setPoints(convertedPositions);
 
+                // Updates the cameraposition to see all points on the map
                 TfSetPointAction.this.setCameraPosition(convertedPositions);
             }
 
@@ -69,18 +80,25 @@ public class TfSetPointAction {
         mRef.addValueEventListener(positionListener);
     }
 
-    private void setOtherPoints(List<TfUserPosition> positions) {
+    /**
+     * Sets all markers on the map.
+     * @param positions Positions to set.
+     */
+    private void setPoints(List<TfUserPosition> positions) {
         for (TfUserPosition userPosition: positions) {
             setOnePoint(userPosition);
         }
     }
-
     private void setOnePoint (TfUserPosition userPosition) {
        MarkerOptions options = TfMarkerFactory.getInstance().createMarker(userPosition, mContext);
         mGoogleMap.addMarker(options);
 
     }
 
+    /**
+     * Set the cameraposition to a good angle.
+     * @param convertedPositions Position of all markers to get a good position.
+     */
     private void setCameraPosition(List<TfUserPosition> convertedPositions) {
         TfMapCalculation zoomAction = new TfMapCalculation();
         zoomAction.setCameraPosition(convertedPositions, mGoogleMap);

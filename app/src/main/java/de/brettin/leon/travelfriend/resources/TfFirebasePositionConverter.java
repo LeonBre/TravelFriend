@@ -39,6 +39,12 @@ public class TfFirebasePositionConverter {
         return result;
     }
 
+    /**
+     * Filters all positions that are not needed for the display.
+     * @param userPositions All userpositions on the database.
+     * @param context The {@link Context}
+     * @return All userpositions that should be shown on the map.
+     */
     public List<TfUserPosition> filterPositions (List<TfUserPosition> userPositions, Context context) {
         List<TfUserPosition> result = new LinkedList<>();
 
