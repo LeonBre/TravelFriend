@@ -7,8 +7,8 @@ android {
         applicationId "de.brettin.leon.travelfriend"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 100004
-        versionName "1.0.4"
+        versionCode 100005
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
