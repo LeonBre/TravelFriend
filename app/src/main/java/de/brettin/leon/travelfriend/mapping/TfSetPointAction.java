@@ -39,7 +39,7 @@ public class TfSetPointAction {
      * When data on the realtime database changes onDataChange is called.
      */
     private void initiateListener() {
-        final TfDatabase database = TfDatabase.getInstance(mContext);
+        final TfDatabase database = new TfDatabase(mContext);
         mRef = database.getPointReference();
 
         ValueEventListener positionListener = new ValueEventListener() {

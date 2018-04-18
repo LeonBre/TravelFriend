@@ -2,19 +2,14 @@ package de.brettin.leon.travelfriend;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.crashlytics.android.Crashlytics;
 
 import de.brettin.leon.travelfriend.mapping.TfMapCallbackHandler;
 import de.brettin.leon.travelfriend.schedule.TfScheduleManager;
@@ -30,20 +25,33 @@ public class MapsActivity extends FragmentActivity {
         // Schedule all Tasks
         TfScheduleManager.schedule(this);
 
-        // Check for Permission of the user
-        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+        checkPermissions();
+    }
+
+    /**
+     * Wait until permission is granted, then check if all permissions are really granted.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        checkPermissions();
+    }
+
+    /**
+     * Check for all needed permissions.
+     * If all permissions are granted initiate the app.
+     */
+    public void checkPermissions() {
+        boolean fineLocationPermissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean coarseLoctationPermissionGranted = ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED;
+
+        if (!fineLocationPermissionGranted) {
+            ActivityCompat.requestPermissions(this, new String [] {Manifest.permission.ACCESS_FINE_LOCATION}, 14141);
+
+        } else if (!coarseLoctationPermissionGranted) {
             ActivityCompat.requestPermissions(this, new String [] {Manifest.permission.ACCESS_COARSE_LOCATION}, 14141);
         } else {
             initiate();
         }
-    }
-
-    /**
-     * Wait until permission is granted
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        initiate();
     }
 
     /**

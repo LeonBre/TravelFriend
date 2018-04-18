@@ -2,14 +2,12 @@ package de.brettin.leon.travelfriend.view;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,14 +143,13 @@ class SetUpClass {
      * Set up the functionality for the Update Position Field
      */
     void setUpUpdatePosition() {
-
         mUpdatePositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mUpdatePositionProgressBar.setVisibility(View.VISIBLE);
                 mUpdatePositionButton.setVisibility(View.GONE);
 
-                TfDatabase.getInstance(view.getContext()).writeOwnPosition();
+                (new TfDatabase(view.getContext())).writeOwnPosition(view.getContext());
 
                 new CountDownTimer(60000, 1000) {
 

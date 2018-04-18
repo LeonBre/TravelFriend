@@ -2,7 +2,6 @@ package de.brettin.leon.travelfriend.resources;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 /**
@@ -55,7 +54,7 @@ public class TfSharedPreferences {
     }
 
     public void writeBoolean(String key, boolean value) {
-        mSharedPreferences.edit().putBoolean(key, value);
+        mSharedPreferences.edit().putBoolean(key, value).apply();
     }
 
     public boolean hasValue(String key) {
