@@ -100,7 +100,7 @@ public class TfSetPointAction {
      * @param convertedPositions Position of all markers to get a good position.
      */
     private void setCameraPosition(List<TfUserPosition> convertedPositions) {
-        TfMapCalculation zoomAction = new TfMapCalculation();
-        zoomAction.setCameraPosition(convertedPositions, mGoogleMap);
+        TfMapCalculation zoomAction = new TfMapCalculation(convertedPositions, mGoogleMap, mContext);
+        zoomAction.setCameraPosition();
     }
 }

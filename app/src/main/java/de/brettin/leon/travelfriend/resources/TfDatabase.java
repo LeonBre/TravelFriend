@@ -29,6 +29,10 @@ public class TfDatabase {
 
     }
 
+    /**
+     * Writes the own position in the database
+     * @param position Position to write
+     */
     public void writeOwnPosition(LatLng position) {
         TfUserNameRes usernameRes = TfUserNameRes.getInstance(mContext);
         Calendar cal = Calendar.getInstance();
@@ -36,7 +40,12 @@ public class TfDatabase {
         mRef.child(usernameRes.getUsername()).setValue(valueToSave);
     }
 
-    public void writeOwnPosition(Context context) {
+
+    /**
+     * Updates the own position by calling {@link com.google.android.gms.awareness.Awareness}
+     * @param context The {@link Context}
+     */
+    public void updateOwnPosition(Context context) {
         TfAction writeAction = new TfAction() {
             @Override
             public void doAction(Object o) {

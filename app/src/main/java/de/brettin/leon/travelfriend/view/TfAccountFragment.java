@@ -149,9 +149,9 @@ class SetUpClass {
                 mUpdatePositionProgressBar.setVisibility(View.VISIBLE);
                 mUpdatePositionButton.setVisibility(View.GONE);
 
-                (new TfDatabase(view.getContext())).writeOwnPosition(view.getContext());
+                (new TfDatabase(view.getContext())).updateOwnPosition(view.getContext());
 
-                new CountDownTimer(60000, 1000) {
+                new CountDownTimer(view.getContext().getResources().getInteger(R.integer.updatePositionMaximumSeconds), 1000) {
 
                     public void onTick(long millisUntilFinished) {
                         mUpdatePositionText.setText(mView.getResources().getString(R.string.update_position_timing, millisUntilFinished / 1000));

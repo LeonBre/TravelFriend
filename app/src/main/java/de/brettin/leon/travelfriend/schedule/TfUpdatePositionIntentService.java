@@ -26,7 +26,7 @@ public class TfUpdatePositionIntentService extends JobService{
      */
     private boolean updatePosition() {
         final TfDatabase database = new TfDatabase(this);
-        database.writeOwnPosition(this);
+        database.updateOwnPosition(this);
         return true;
     }
 }
