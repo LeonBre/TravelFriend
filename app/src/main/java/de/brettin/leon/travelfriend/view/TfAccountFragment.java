@@ -129,6 +129,8 @@ class SetUpClass {
      * Set up the functionality for the Position Checkbox
      */
     void setUpPositionCheck() {
+        mPositionCheckbox.setChecked(TfPositionCheckRes.getInstance(mView.getContext()).shouldCheckPosition());
+
         mPositionCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
