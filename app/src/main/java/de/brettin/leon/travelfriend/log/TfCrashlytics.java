@@ -11,4 +11,7 @@ public class TfCrashlytics {
     public static void logException (Throwable exception) {
         Crashlytics.logException(exception);
     }
+
+    public static void logException (String message) { Crashlytics.logException(new Exception(message));
+    }
 }

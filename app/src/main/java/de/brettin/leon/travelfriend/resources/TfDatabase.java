@@ -54,8 +54,8 @@ public class TfDatabase {
             }
         };
 
-        TfGetLocationAction updatePosition = new TfGetLocationAction();
-        updatePosition.updatePosition(writeAction, context);
+        TfGetLocationAction updatePosition = new TfGetLocationAction(context, writeAction);
+        updatePosition.updatePosition();
 
     }
 
