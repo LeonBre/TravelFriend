@@ -8,7 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
-import de.brettin.leon.travelfriend.mapping.TfPositionAction;
+import de.brettin.leon.travelfriend.mapping.TfGetLocationAction;
 
 /**
  * Database which interacts with firebase database
@@ -54,7 +54,7 @@ public class TfDatabase {
             }
         };
 
-        TfPositionAction updatePosition = new TfPositionAction();
+        TfGetLocationAction updatePosition = new TfGetLocationAction();
         updatePosition.updatePosition(writeAction, context);
 
     }

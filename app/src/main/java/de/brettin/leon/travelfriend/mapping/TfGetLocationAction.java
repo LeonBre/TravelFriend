@@ -18,7 +18,7 @@ import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 import de.brettin.leon.travelfriend.view.TfNotificationBuilder;
 import de.brettin.leon.travelfriend.view.TfNotificationType;
 
-public class TfPositionAction {
+public class TfGetLocationAction {
 
     private static final int GPS_ERROR_NOTIFICATION_ID = 3847398;
 
@@ -41,7 +41,7 @@ public class TfPositionAction {
 
                     // GPS off
                     if (task.getException().getMessage().contains("7503")) {
-                        TfCrashlytics.log(TfPositionAction.class.getSimpleName(), "Error 7503: Error occurs when gps is off");
+                        TfCrashlytics.log(TfGetLocationAction.class.getSimpleName(), "Error 7503: Error occurs when gps is off");
 
                         // Show the user a message with indicates he should check his connection
                         TfNotificationBuilder builder = new TfNotificationBuilder();
