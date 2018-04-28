@@ -22,15 +22,30 @@ import de.brettin.leon.travelfriend.resources.TfPositionCheckRes;
 import de.brettin.leon.travelfriend.view.TfNotificationBuilder;
 import de.brettin.leon.travelfriend.view.TfNotificationType;
 
+/**
+ * Action to get the location of the android device
+ */
 public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    // Code for the GPS Notification id
+    // Its random but Im intending not to spam the user so the notification will replace a old one through this id
     private static final int GPS_ERROR_NOTIFICATION_ID = 3847398;
 
     private Context mContext;
+
+    // Action Class with one method to write the location to the database
+    // I did this action object because of better encapsulation
     private TfAction mWriteAction;
 
+    // The following objects are for the FusedLocationApi
+    // Google Client to connect to the Play Service
     private GoogleApiClient mGoogleApiClient;
+    // Boolean value to check if the api is already conneced
+    // --------------------------------------------------------------------------
+    // ------The client MUST be connected to get a location other than null------
+    // --------------------------------------------------------------------------
     private boolean mGoogleApiIsConnected;
+    // Static value to check if the connection should be checked
     private static boolean mAskForConnection = false;
 
     public TfGetLocationAction(Context context, TfAction writeAction) {
@@ -38,6 +53,7 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
         mWriteAction = writeAction;
 
         mGoogleApiIsConnected = false;
+        // Build the google api client for the fusedlocation api
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -52,13 +68,13 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
     /**
      * Updates the position of the user
      */
-
     public void updatePosition() {
         // Check if the position should be checked
         if (!TfPositionCheckRes.getInstance(mContext).shouldCheckPosition()) {
             return;
         }
 
+        // Check if the google api is already connected
         if (!mGoogleApiIsConnected) {
             mAskForConnection = true;
 
@@ -71,6 +87,9 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
 
     }
 
+    /**
+     * If everything is set up nicely we can start to search for our location
+     */
     @SuppressLint("MissingPermission")
     private void startLocationSearch() {
         FusedLocationProviderClient locationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
@@ -98,7 +117,6 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
         });
     }
 
-
     /**
      * Set location on the database
      * @param location Location to set
@@ -112,6 +130,9 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
         mAskForConnection = false;
     }
 
+    /**
+     * Google Api is connected
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mGoogleApiIsConnected = true;
@@ -121,11 +142,13 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
         }
     }
 
+    // I have no use for this
     @Override
     public void onConnectionSuspended(int i) {
         TfCrashlytics.log(this.getClass().getSimpleName(), "Location supsended :-/");
     }
 
+    // Error on the connection i just log this
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiIsConnected = false;
