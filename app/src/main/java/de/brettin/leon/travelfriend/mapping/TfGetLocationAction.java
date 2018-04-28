@@ -123,7 +123,7 @@ public class TfGetLocationAction implements GoogleApiClient.ConnectionCallbacks,
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        TfCrashlytics.log(this.getClass().getSimpleName(), "Location supsended :-/");
     }
 
     @Override
