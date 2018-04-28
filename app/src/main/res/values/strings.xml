@@ -4,4 +4,12 @@
 
     <string name="update_position">Position jetzt aktualisieren</string>
     <string name="update_position_timing">Aktualisierung in %d Sekunden wieder möglich</string>
+
+
+    <string name="notification_error">Fehler :-/</string>
+    <string name="notification_message">Eine kleine Message für dich</string>
+    <string name="notification_no_gps_title">Ich kann dich nicht finden :-/</string>
+    <string name="notification_no_gps_message">Travelfriend kann nicht auf die GPS-Position zugreifen.</string>
+
+
 </resources>
